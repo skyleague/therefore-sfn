@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "@skyleague/node-standards": "^1.7.3",
+    "@skyleague/therefore": "^1.15.0",
     "typescript": "^4.8.2"
   },
   "publishConfig": {
