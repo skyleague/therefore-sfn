@@ -2,7 +2,7 @@
  * Definitions in this file are based on the AWS spec:
  * https://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html
  */
-import { baseInOutState, baseState, eitherEndOrNext, parametrizedState, retryableState } from './base'
+import { baseInOutState, baseState, eitherEndOrNext, parametrizedState, retryableState } from './base.schema'
 import { choiceState } from './choice.schema'
 
 import {

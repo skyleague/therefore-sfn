@@ -1,0 +1,66 @@
+import { templateLambdaArn } from './helpers'
+import { validateStateMachine } from './validate'
+
+test('lambda retry injection', () => {
+    expect(
+        validateStateMachine({
+            definition: {
+                StartAt: 'Enter',
+                States: {
+                    Enter: {
+                        Type: 'Pass',
+                        Next: 'SomeLambda',
+                    },
+
+                    SomeLambda: {
+                        Type: 'Task',
+                        Resource: templateLambdaArn({ name: 'some-lambda' }),
+                        Next: 'Exit',
+                    },
+
+                    Exit: {
+                        Type: 'Succeed',
+                    },
+                },
+            },
+        })
+    ).toMatchInlineSnapshot(`
+        {
+          "StartAt": "Enter",
+          "States": {
+            "Enter": {
+              "Next": "SomeLambda",
+              "Type": "Pass",
+            },
+            "Exit": {
+              "Type": "Succeed",
+            },
+            "SomeLambda": {
+              "Next": "Exit",
+              "Resource": "arn:aws:lambda:\${aws_region}:\${aws_account_id}:function:some-lambda",
+              "Retry": [
+                {
+                  "BackoffRate": 1.5,
+                  "ErrorEquals": [
+                    "Lambda.ServiceException",
+                    "Lambda.AWSLambdaException",
+                    "Lambda.SdkClientException",
+                  ],
+                  "IntervalSeconds": 0.2,
+                  "MaxAttempts": 17,
+                },
+                {
+                  "BackoffRate": 1.5,
+                  "ErrorEquals": [
+                    "Lambda.TooManyRequestsException",
+                  ],
+                  "IntervalSeconds": 2,
+                  "MaxAttempts": 13,
+                },
+              ],
+              "Type": "Task",
+            },
+          },
+        }
+    `)
+})
