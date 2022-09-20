@@ -5,6 +5,7 @@
 /* eslint-disable */
 import type { ValidateFunction } from 'ajv'
 import { ChoiceState } from './choice.type'
+import { RetryOptions } from './base.type'
 
 export interface FailState {
     Type: 'Fail'
@@ -49,7 +50,7 @@ export type TaskState =
           ResultPath?: string
           Parameters?: unknown
           ResultSelector?: unknown
-          Retry?: unknown
+          Retry?: [RetryOptions, ...RetryOptions[]]
           Catch?: unknown
           Resource: string
           TimeoutSeconds?: number
@@ -66,7 +67,7 @@ export type TaskState =
           ResultPath?: string
           Parameters?: unknown
           ResultSelector?: unknown
-          Retry?: unknown
+          Retry?: [RetryOptions, ...RetryOptions[]]
           Catch?: unknown
           Resource: string
           TimeoutSeconds?: number
@@ -101,7 +102,7 @@ export type ParallelState =
           ResultPath?: string
           Parameters?: unknown
           ResultSelector?: unknown
-          Retry?: unknown
+          Retry?: [RetryOptions, ...RetryOptions[]]
           Catch?: unknown
           Branches: [StateMachine, ...StateMachine[]]
           End: boolean
@@ -114,7 +115,7 @@ export type ParallelState =
           ResultPath?: string
           Parameters?: unknown
           ResultSelector?: unknown
-          Retry?: unknown
+          Retry?: [RetryOptions, ...RetryOptions[]]
           Catch?: unknown
           Branches: [StateMachine, ...StateMachine[]]
           Next: string
@@ -129,7 +130,7 @@ export type MapState =
           ResultPath?: string
           Parameters?: unknown
           ResultSelector?: unknown
-          Retry?: unknown
+          Retry?: [RetryOptions, ...RetryOptions[]]
           Catch?: unknown
           MaxConcurrency?: number
           ItemsPath?: string
@@ -144,7 +145,7 @@ export type MapState =
           ResultPath?: string
           Parameters?: unknown
           ResultSelector?: unknown
-          Retry?: unknown
+          Retry?: [RetryOptions, ...RetryOptions[]]
           Catch?: unknown
           MaxConcurrency?: number
           ItemsPath?: string
