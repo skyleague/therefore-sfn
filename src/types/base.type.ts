@@ -10,3 +10,9 @@ export interface RetryOptions {
     MaxAttempts?: number
     BackoffRate?: number
 }
+
+export interface CatchOptions {
+    ErrorEquals: [string, ...string[]]
+    Next: string
+    ResultPath?: string
+}
