@@ -4,8 +4,8 @@
  */
 /* eslint-disable */
 import type { ValidateFunction } from 'ajv'
+import { CatchOptions, RetryOptions } from './base.type'
 import { ChoiceState } from './choice.type'
-import { RetryOptions } from './base.type'
 
 export interface FailState {
     Type: 'Fail'
@@ -51,7 +51,7 @@ export type TaskState =
           Parameters?: unknown
           ResultSelector?: unknown
           Retry?: [RetryOptions, ...RetryOptions[]]
-          Catch?: unknown
+          Catch?: [CatchOptions, ...CatchOptions[]]
           Resource: string
           TimeoutSeconds?: number
           HeartbeatSeconds?: number
@@ -68,7 +68,7 @@ export type TaskState =
           Parameters?: unknown
           ResultSelector?: unknown
           Retry?: [RetryOptions, ...RetryOptions[]]
-          Catch?: unknown
+          Catch?: [CatchOptions, ...CatchOptions[]]
           Resource: string
           TimeoutSeconds?: number
           HeartbeatSeconds?: number
@@ -103,7 +103,7 @@ export type ParallelState =
           Parameters?: unknown
           ResultSelector?: unknown
           Retry?: [RetryOptions, ...RetryOptions[]]
-          Catch?: unknown
+          Catch?: [CatchOptions, ...CatchOptions[]]
           Branches: [StateMachine, ...StateMachine[]]
           End: boolean
       }
@@ -116,7 +116,7 @@ export type ParallelState =
           Parameters?: unknown
           ResultSelector?: unknown
           Retry?: [RetryOptions, ...RetryOptions[]]
-          Catch?: unknown
+          Catch?: [CatchOptions, ...CatchOptions[]]
           Branches: [StateMachine, ...StateMachine[]]
           Next: string
       }
@@ -131,7 +131,7 @@ export type MapState =
           Parameters?: unknown
           ResultSelector?: unknown
           Retry?: [RetryOptions, ...RetryOptions[]]
-          Catch?: unknown
+          Catch?: [CatchOptions, ...CatchOptions[]]
           MaxConcurrency?: number
           ItemsPath?: string
           Iterator: StateMachine
@@ -146,7 +146,7 @@ export type MapState =
           Parameters?: unknown
           ResultSelector?: unknown
           Retry?: [RetryOptions, ...RetryOptions[]]
-          Catch?: unknown
+          Catch?: [CatchOptions, ...CatchOptions[]]
           MaxConcurrency?: number
           ItemsPath?: string
           Iterator: StateMachine

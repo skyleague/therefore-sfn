@@ -19,11 +19,16 @@ export const retryOptions = $object({
     MaxAttempts: $optional($number),
     BackoffRate: $optional($number),
 })
+export const catchOptions = $object({
+    ErrorEquals: $array($string, { minItems: 1 }),
+    Next: $string,
+    ResultPath: $optional($string),
+})
 export const retryableState = {
     ...parametrizedState,
     ResultSelector: $optional($unknown),
     Retry: $optional($array($ref(retryOptions), { minItems: 1 })),
-    Catch: $optional($unknown),
+    Catch: $optional($array($ref(catchOptions), { minItems: 1 })),
 }
 
 export function eitherEndOrNext<T>(x: T) {
