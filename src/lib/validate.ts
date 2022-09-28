@@ -69,6 +69,18 @@ function validateNext({
         injectRetryOptions({ state, retryOptions })
     }
 
+    if ('Catch' in state) {
+        for (const c of state.Catch) {
+            visited = validateNext({
+                definition,
+                next: c.Next,
+                visited,
+                retryOptions,
+                onState,
+            })
+        }
+    }
+
     if (state.Type === 'Choice') {
         for (const branch of state.Choices) {
             visited = validateNext({
