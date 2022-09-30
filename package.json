@@ -36,15 +36,16 @@
     "test": "npx jest"
   },
   "dependencies": {
+    "source-map-support": "^0.5.21",
+    "ts-node": "^10.9.1",
     "tslib": "^2.4.0",
-    "yargs": "^17.5.1",
-    "source-map-support": "^0.5.21"
+    "yargs": "^17.5.1"
   },
   "devDependencies": {
     "@skyleague/node-standards": "^1.7.3",
     "@skyleague/therefore": "^1.15.0",
-    "typescript": "^4.8.2",
-    "@types/source-map-support": "^0.5.6"
+    "@types/source-map-support": "^0.5.6",
+    "typescript": "^4.8.2"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org",
