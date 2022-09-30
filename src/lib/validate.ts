@@ -1,4 +1,4 @@
-import type { SafeStateMachine } from '..'
+import type { SafeStateMachine } from '../types'
 import { StateMachine } from '../types'
 import type { State } from '../types/sfn.type'
 
