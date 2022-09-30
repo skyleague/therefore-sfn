@@ -11,13 +11,22 @@
   "node-standards": {
     "type": "yargs-cli",
     "template": {
-      "exclude": ["bin/run"]
+      "exclude": [
+        "bin/run"
+      ]
     }
   },
   "engines": {
     "node": ">=14"
   },
-  "files": ["bin", ".main.js", ".main.js.map", "index.d.ts", "src/**/*.d.ts", "package.json"],
+  "files": [
+    "bin",
+    ".main.js",
+    ".main.js.map",
+    "index.d.ts",
+    "src/**/*.d.ts",
+    "package.json"
+  ],
   "scripts": {
     "build": "npx ts-node esbuild.config.ts",
     "build:clean": "npx tsc --build --clean && rm .main.js && rm .main.js.map",
@@ -36,6 +45,7 @@
     "test": "npx jest"
   },
   "dependencies": {
+    "ajv": "^8.11.0",
     "source-map-support": "^0.5.21",
     "ts-node": "^10.9.1",
     "tslib": "^2.4.0",
