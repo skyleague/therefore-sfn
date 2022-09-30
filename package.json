@@ -5,20 +5,19 @@
   "license": "MIT",
   "main": ".main.js",
   "types": "index.d.ts",
-  "sideEffects": false,
+  "bin": {
+    "therefore-sfn": "./bin/run"
+  },
   "node-standards": {
-    "type": "library"
+    "type": "yargs-cli",
+    "template": {
+      "exclude": ["bin/run"]
+    }
   },
   "engines": {
     "node": ">=14"
   },
-  "files": [
-    ".main.js",
-    ".main.js.map",
-    "index.d.ts",
-    "src/**/*.d.ts",
-    "package.json"
-  ],
+  "files": ["bin", ".main.js", ".main.js.map", "index.d.ts", "src/**/*.d.ts", "package.json"],
   "scripts": {
     "build": "npx ts-node esbuild.config.ts",
     "build:clean": "npx tsc --build --clean && rm .main.js && rm .main.js.map",
@@ -37,12 +36,15 @@
     "test": "npx jest"
   },
   "dependencies": {
-    "tslib": "^2.4.0"
+    "tslib": "^2.4.0",
+    "yargs": "^17.5.1",
+    "source-map-support": "^0.5.21"
   },
   "devDependencies": {
     "@skyleague/node-standards": "^1.7.3",
     "@skyleague/therefore": "^1.15.0",
-    "typescript": "^4.8.2"
+    "typescript": "^4.8.2",
+    "@types/source-map-support": "^0.5.6"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org",
