@@ -6,7 +6,7 @@ export const stateMachineCompileInput = $validator(
             file: $string,
             export: $string,
             awsRegion: $string,
-            awsAccountId: $string({ pattern: /^[0-9]+$/ }),
+            awsAccountId: $string,
         },
         { additionalProperties: true }
     )
