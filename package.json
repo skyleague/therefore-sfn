@@ -36,7 +36,6 @@
     "test": "npx jest"
   },
   "dependencies": {
-    "@skyleague/event-horizon": "^1.22.0",
     "ajv": "^8.11.0",
     "source-map-support": "^0.5.21",
     "ts-node": "^10.9.1",

@@ -1,6 +1,10 @@
 #!/usr/bin/env node
 const { existsSync } = require('fs')
-const { join } = require('path')
+const { join, resolve } = require('path')
+try {
+    process.env.NODE_PATH = [process.env.NODE_PATH, resolve(__dirname, '../../..')].filter((p) => p !== undefined).join(':')
+    require('module').Module._initPaths()
+} catch (err) {}
 
 const project = join(__dirname, '../tsconfig.json')
 const dev = existsSync(project) && process.env.DEBUG != 'false'
