@@ -1,8 +1,9 @@
 {
   "name": "@skyleague/therefore-sfn",
-  "description": "",
+  "description": "Therefore the JSON TypeScript toolkit adapted for AWS StepFunctions.",
   "version": "1.0.0",
   "license": "MIT",
+  "author": "SkyLeague Technologies B.V. <technologies@skyleague.io> (https://skyleague.io)",
   "main": ".main.js",
   "types": "index.d.ts",
   "bin": {
