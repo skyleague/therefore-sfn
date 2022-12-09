@@ -162,6 +162,7 @@ function injectRetryOptions({
                     IntervalSeconds: retryOptions?.lambda?.tooManyRequests?.intervalSeconds ?? 2,
                     MaxAttempts: retryOptions?.lambda?.tooManyRequests?.maxAttempts ?? 13,
                 },
+                ...(state.Retry ?? []),
             ]
         }
         const unhandled = ['Lambda.ServiceException', 'Lambda.AWSLambdaException', 'Lambda.SdkClientException'].filter(
