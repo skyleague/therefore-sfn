@@ -1,6 +1,6 @@
-import type { SafeStateMachine } from '../types'
-import { StateMachine } from '../types'
-import type { State } from '../types/sfn.type'
+import type { SafeStateMachine } from '../types/index.js'
+import { StateMachine } from '../types/index.js'
+import type { State } from '../types/sfn.type.js'
 
 export function validateStateMachine<States extends StateMachine['States']>({
     definition,
@@ -12,9 +12,7 @@ export function validateStateMachine<States extends StateMachine['States']>({
     onState?: (state: State) => void
 }): StateMachine {
     if (!StateMachine.is(definition)) {
-        throw new Error(
-            `Definition did not comply with the StateMachine schema; ${StateMachine.validate.errors?.[0].message ?? ''}`
-        )
+        throw new Error(`Definition did not comply with the StateMachine schema; ${StateMachine.errors?.[0]?.message ?? ''}`)
     }
     const visited = validateNext({
         definition,
@@ -64,7 +62,7 @@ function validateNext({
     }
 
     // Apply hook on the state
-    void onState?.(state)
+    onState?.(state)
     if (state.Type === 'Task') {
         injectRetryOptions({ state, retryOptions })
     }
@@ -110,7 +108,7 @@ function validateNext({
             retryOptions,
             onState,
         })
-    } else if ('End' in state && state.End === true) {
+    } else if ('End' in state && state.End) {
         return visited
     } else if (state.Type === 'Succeed' || state.Type === 'Fail') {
         return visited
@@ -144,7 +142,7 @@ function injectRetryOptions({
 }) {
     if (
         state.Type === 'Task' &&
-        (retryOptions?.lambda?.tooManyRequests?.enabled !== false || retryOptions?.lambda?.serviceExceptions?.enabled !== false)
+        (retryOptions?.lambda?.tooManyRequests?.enabled !== false || retryOptions.lambda.serviceExceptions?.enabled !== false)
     ) {
         const lambdaTooManyRequestsException = 'Lambda.TooManyRequestsException'
         if (
