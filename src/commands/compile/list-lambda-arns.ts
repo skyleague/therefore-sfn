@@ -1,7 +1,7 @@
-import { LambdaIntegrationParameters } from './input.type'
+import { LambdaIntegrationParameters } from './input.type.js'
 
-import { templateLambdaArn } from '../../lib'
-import type { StateMachine } from '../../types'
+import { templateLambdaArn } from '../../lib/index.js'
+import type { StateMachine } from '../../types/index.js'
 
 export function listLambdaArns(definition: StateMachine) {
     const lambdaArns: string[] = []

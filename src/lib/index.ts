@@ -1,2 +1,2 @@
-export { templateLambdaArn } from './helpers'
-export { validateStateMachine } from './validate'
+export { templateLambdaArn } from './helpers.js'
+export { validateStateMachine } from './validate.js'

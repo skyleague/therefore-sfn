@@ -1,4 +1,4 @@
-import { templateLambdaArn, validateStateMachine } from '../../src'
+import { templateLambdaArn, validateStateMachine } from '../../src/index.js'
 
 export const definition = validateStateMachine({
     definition: {

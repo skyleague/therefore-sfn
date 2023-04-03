@@ -1,4 +1,4 @@
-import { baseInOutState } from './base.schema'
+import { baseInOutState } from './base.schema.js'
 
 import { $array, $const, $object, $optional, $ref, $string, $unknown } from '@skyleague/therefore'
 

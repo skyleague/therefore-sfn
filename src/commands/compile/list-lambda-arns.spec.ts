@@ -1,7 +1,7 @@
-import { listLambdaArns } from './list-lambda-arns'
+import { listLambdaArns } from './list-lambda-arns.js'
 
-import { templateLambdaArn } from '../../lib'
-import type { StateMachine } from '../../types'
+import { templateLambdaArn } from '../../lib/index.js'
+import type { StateMachine } from '../../types/index.js'
 
 test('list-nested-lambda-arns', () => {
     const definition: StateMachine = {

@@ -1,5 +1,5 @@
-import { templateLambdaArn } from './helpers'
-import { validateStateMachine } from './validate'
+import { templateLambdaArn } from './helpers.js'
+import { validateStateMachine } from './validate.js'
 
 test('lambda retry injection', () => {
     expect(

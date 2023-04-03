@@ -1,11 +1,11 @@
-import { StateMachineCompileInput } from './input.type'
-import { listLambdaArns } from './list-lambda-arns'
+import { StateMachineCompileInput } from './input.type.js'
+import { listLambdaArns } from './list-lambda-arns.js'
 
-import type { StateMachine } from '../../types'
+import type { StateMachine } from '../../types/index.js'
 
 import type { Argv } from 'yargs'
 
-import path from 'path'
+import path from 'node:path'
 
 export function builder(yargs: Argv): Argv<StateMachineCompileInput> {
     return yargs
