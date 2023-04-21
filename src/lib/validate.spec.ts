@@ -1,7 +1,9 @@
 import { templateLambdaArn } from './helpers.js'
 import { validateStateMachine } from './validate.js'
 
-test('lambda retry injection', () => {
+import { expect, it } from 'vitest'
+
+it('lambda retry injection', () => {
     expect(
         validateStateMachine({
             definition: {
