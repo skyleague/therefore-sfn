@@ -28,8 +28,8 @@ export async function handler(argv: ReturnType<typeof builder>['argv']): Promise
         file = path.join(process.cwd(), file)
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-var-requires
-    const { [input.export]: definition } = require(file)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const { [input.export]: definition } = await import(file)
     const lambdaArns = [...listLambdaArns(definition as StateMachine)].sort()
     console.log(
         JSON.stringify({
