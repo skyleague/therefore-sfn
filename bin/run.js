@@ -9,7 +9,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const project = path.join(__dirname, '../tsconfig.json')
 const dev = fs.existsSync(project) && process.env.DEBUG != 'false'
 
-if (dev && !process.env.NODE_OPTIONS?.includes('--loader ts-node/esm')) {
+if (!process.env.NODE_OPTIONS?.includes('--loader ts-node/esm')) {
     await new Promise((resolve, reject) => {
         const subprocess = spawn(process.argv[0], [...process.argv.slice(1)], {
             cwd: process.cwd(),
