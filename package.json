@@ -2,21 +2,25 @@
   "name": "@skyleague/therefore-sfn",
   "version": "1.0.0",
   "description": "Therefore the JSON TypeScript toolkit adapted for AWS StepFunctions.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/skyleague/therefore-sfn.git"
+  },
   "license": "MIT",
   "author": "SkyLeague Technologies B.V. <technologies@skyleague.io> (https://skyleague.io)",
   "type": "module",
   "exports": {
-    ".": "./dist/index.js",
+    ".": "./.dist/index.js",
     "./package.json": "./package.json",
-    "./*.js": "./dist/*.js"
+    "./*.js": "./.dist/*.js"
   },
-  "types": "./dist/index.d.ts",
+  "types": "./.dist/index.d.ts",
   "bin": {
-    "therefore-sfn": "./bin/run"
+    "therefore-sfn": "./bin/run.js"
   },
   "files": [
     "bin",
-    "dist",
+    ".dist",
     "package.json"
   ],
   "scripts": {
@@ -41,11 +45,11 @@
     "source-map-support": "^0.5.21",
     "ts-node": "^10.9.1",
     "tslib": "^2.5.0",
-    "yargs": "^17.7.1"
+    "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@skyleague/node-standards": "^3.0.0",
-    "@skyleague/therefore": "^2.0.3",
+    "@skyleague/node-standards": "^3.6.5",
+    "@skyleague/therefore": "^2.2.1",
     "@types/source-map-support": "^0.5.6",
     "@types/yargs": "^17.0.24",
     "typescript": "^5.0.4"
@@ -55,6 +59,7 @@
   },
   "publishConfig": {
     "access": "public",
+    "provenance": true,
     "registry": "https://registry.npmjs.org"
   },
   "node-standards": {
