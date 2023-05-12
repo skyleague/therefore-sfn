@@ -27,6 +27,7 @@ export async function handler(argv: ReturnType<typeof builder>['argv']): Promise
         // If the path is not an absolute path, attempt to resolve it relative to the working directory
         file = path.join(process.cwd(), file)
     }
+    file = file.replace(/\.ts$/, '.js')
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { [input.export]: definition } = await import(file)
