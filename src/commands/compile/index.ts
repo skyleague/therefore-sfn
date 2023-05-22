@@ -6,6 +6,7 @@ import type { StateMachine } from '../../types/index.js'
 import type { Argv } from 'yargs'
 
 import path from 'node:path'
+import { pathToFileURL } from 'node:url'
 
 export function builder(yargs: Argv): Argv<StateMachineCompileInput> {
     return yargs
@@ -27,7 +28,7 @@ export async function handler(argv: ReturnType<typeof builder>['argv']): Promise
         // If the path is not an absolute path, attempt to resolve it relative to the working directory
         file = path.join(process.cwd(), file)
     }
-    file = file.replace(/\.ts$/, '.js')
+    file = pathToFileURL(file.replace(/\.ts$/, '.js')).href
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { [input.export]: definition } = await import(file)
