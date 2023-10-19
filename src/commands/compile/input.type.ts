@@ -3,8 +3,8 @@
  * Do not manually touch this
  */
 /* eslint-disable */
-import AjvValidator from 'ajv'
 import type { ValidateFunction } from 'ajv'
+import { ValidationError } from 'ajv'
 
 export interface LambdaIntegrationParameters {
     FunctionName: string
@@ -14,7 +14,7 @@ export interface LambdaIntegrationParameters {
 
 export const LambdaIntegrationParameters = {
     validate: (await import('./schemas/lambda-integration-parameters.schema.js'))
-        .validate10 as unknown as ValidateFunction<LambdaIntegrationParameters>,
+        .validate as ValidateFunction<LambdaIntegrationParameters>,
     get schema() {
         return LambdaIntegrationParameters.validate.schema
     },
@@ -24,7 +24,7 @@ export const LambdaIntegrationParameters = {
     is: (o: unknown): o is LambdaIntegrationParameters => LambdaIntegrationParameters.validate(o) === true,
     assert: (o: unknown) => {
         if (!LambdaIntegrationParameters.validate(o)) {
-            throw new AjvValidator.ValidationError(LambdaIntegrationParameters.errors ?? [])
+            throw new ValidationError(LambdaIntegrationParameters.errors ?? [])
         }
     },
 } as const
@@ -38,7 +38,7 @@ export interface StateMachineCompileInput {
 
 export const StateMachineCompileInput = {
     validate: (await import('./schemas/state-machine-compile-input.schema.js'))
-        .validate10 as unknown as ValidateFunction<StateMachineCompileInput>,
+        .validate as ValidateFunction<StateMachineCompileInput>,
     get schema() {
         return StateMachineCompileInput.validate.schema
     },
@@ -48,7 +48,7 @@ export const StateMachineCompileInput = {
     is: (o: unknown): o is StateMachineCompileInput => StateMachineCompileInput.validate(o) === true,
     assert: (o: unknown) => {
         if (!StateMachineCompileInput.validate(o)) {
-            throw new AjvValidator.ValidationError(StateMachineCompileInput.errors ?? [])
+            throw new ValidationError(StateMachineCompileInput.errors ?? [])
         }
     },
 } as const

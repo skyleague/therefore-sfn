@@ -1,4 +1,4 @@
-import { $array, $boolean, $number, $object, $optional, $ref, $string, $unknown } from '@skyleague/therefore'
+import { $array, $boolean, $enum, $number, $object, $optional, $ref, $string, $unknown } from '@skyleague/therefore'
 
 export const baseState = {
     Comment: $optional($string),
@@ -18,6 +18,8 @@ export const retryOptions = $object({
     IntervalSeconds: $optional($number),
     MaxAttempts: $optional($number),
     BackoffRate: $optional($number),
+    MaxDelaySeconds: $optional($number),
+    JitterStrategy: $optional($enum(['FULL', 'NONE'])),
 })
 export const catchOptions = $object({
     ErrorEquals: $array($string, { minItems: 1 }),
