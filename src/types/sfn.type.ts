@@ -4,8 +4,8 @@
  */
 /* eslint-disable */
 import type { ValidateFunction } from 'ajv'
-import { CatchOptions, RetryOptions } from './base.type.js'
-import { ChoiceState } from './choice.type.js'
+import { type CatchOptions, type RetryOptions } from './base.type.js'
+import { type ChoiceState } from './choice.type.js'
 
 export interface FailState {
     Type: 'Fail'
@@ -108,7 +108,7 @@ export interface StateMachine {
 }
 
 export const StateMachine = {
-    validate: (await import('./schemas/state-machine.schema.js')).validate10 as unknown as ValidateFunction<StateMachine>,
+    validate: (await import('./schemas/state-machine.schema.js')).validate as ValidateFunction<StateMachine>,
     get schema() {
         return StateMachine.validate.schema
     },

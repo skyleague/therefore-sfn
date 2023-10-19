@@ -15,4 +15,6 @@ export interface RetryOptions {
     IntervalSeconds?: number
     MaxAttempts?: number
     BackoffRate?: number
+    MaxDelaySeconds?: number
+    JitterStrategy?: 'FULL' | 'NONE'
 }

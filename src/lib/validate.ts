@@ -1,6 +1,5 @@
 import type { SafeStateMachine } from '../types/index.js'
-import { StateMachine } from '../types/index.js'
-import type { State } from '../types/sfn.type.js'
+import { StateMachine, type State } from '../types/sfn.type.js'
 
 export function validateStateMachine<States extends StateMachine['States']>({
     definition,
@@ -124,12 +123,16 @@ interface RetryOptions {
             backoffRate?: number
             intervalSeconds?: number
             maxAttempts?: number
+            maxDelaySeconds?: number
+            jitterStrategy?: 'NONE' | 'FULL'
         }
         serviceExceptions?: {
             enabled?: boolean
             backoffRate?: number
             intervalSeconds?: number
             maxAttempts?: number
+            maxDelaySeconds?: number
+            jitterStrategy?: 'NONE' | 'FULL'
         }
     }
 }
@@ -159,6 +162,10 @@ function injectRetryOptions({
                     BackoffRate: retryOptions?.lambda?.tooManyRequests?.backoffRate ?? 1.5,
                     IntervalSeconds: retryOptions?.lambda?.tooManyRequests?.intervalSeconds ?? 2,
                     MaxAttempts: retryOptions?.lambda?.tooManyRequests?.maxAttempts ?? 13,
+                    JitterStrategy: retryOptions?.lambda?.tooManyRequests?.jitterStrategy ?? 'FULL',
+                    ...(retryOptions?.lambda?.tooManyRequests?.maxDelaySeconds !== undefined
+                        ? { MaxDelaySeconds: retryOptions.lambda.tooManyRequests.maxDelaySeconds }
+                        : {}),
                 },
                 ...(state.Retry ?? []),
             ]
@@ -177,6 +184,10 @@ function injectRetryOptions({
                     BackoffRate: retryOptions?.lambda?.serviceExceptions?.backoffRate ?? 1.5,
                     IntervalSeconds: retryOptions?.lambda?.serviceExceptions?.intervalSeconds ?? 0.2,
                     MaxAttempts: retryOptions?.lambda?.serviceExceptions?.maxAttempts ?? 17,
+                    JitterStrategy: retryOptions?.lambda?.serviceExceptions?.jitterStrategy ?? 'FULL',
+                    ...(retryOptions?.lambda?.serviceExceptions?.maxDelaySeconds !== undefined
+                        ? { MaxDelaySeconds: retryOptions.lambda.serviceExceptions.maxDelaySeconds }
+                        : {}),
                 },
                 ...(state.Retry ?? []),
             ]
