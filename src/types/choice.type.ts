@@ -4,6 +4,11 @@
  */
 /* eslint-disable */
 
+interface Choices {
+    Next: string
+    [k: string]: unknown
+}
+
 export interface ChoiceState {
     Type: 'Choice'
     Comment?: string
@@ -11,9 +16,4 @@ export interface ChoiceState {
     OutputPath?: string
     Choices: [Choices, ...Choices[]]
     Default?: string
-}
-
-interface Choices {
-    Next: string
-    [k: string]: unknown
 }
