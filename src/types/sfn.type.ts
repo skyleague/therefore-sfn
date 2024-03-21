@@ -48,7 +48,7 @@ export type MapState =
           Catch?: [CatchOptions, ...CatchOptions[]]
           MaxConcurrency?: number
           ItemsPath?: string
-          Iterator: StateMachine
+          Iterator?: StateMachine
           ItemProcessor: ItemProcessor
           ItemReader?: ItemReader
           ItemSelector?: {
@@ -76,7 +76,7 @@ export type MapState =
           Catch?: [CatchOptions, ...CatchOptions[]]
           MaxConcurrency?: number
           ItemsPath?: string
-          Iterator: StateMachine
+          Iterator?: StateMachine
           ItemProcessor: ItemProcessor
           ItemReader?: ItemReader
           ItemSelector?: {

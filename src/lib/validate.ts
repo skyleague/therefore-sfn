@@ -32,7 +32,7 @@ export function validateStateMachine<States extends StateMachine['States']>({
                 void validateStateMachine({ definition: branch })
             }
         } else if (state?.Type === 'Map') {
-            void validateStateMachine({ definition: state.Iterator })
+            void validateStateMachine({ definition: state.ItemProcessor })
         }
     }
     return definition
