@@ -12,6 +12,27 @@ export interface FailState {
     Comment?: string
 }
 
+export interface ItemBatcher {
+    MaxItemsPerBatchPath?: {
+        [k: string]: string | undefined
+    }
+    MaxInputBytesPerBatchPath?: {
+        [k: string]: string | undefined
+    }
+}
+
+export interface ItemProcessor {
+    ProcessorConfig?: ProcessConfig
+    StartAt: string
+    States: TaskState
+}
+
+export interface ItemReader {
+    ReaderConfig?: ReaderConfig
+    Resource?: string
+    Parameters?: Parameters
+}
+
 export type MapState =
     | {
           Type: 'Map'
@@ -26,6 +47,19 @@ export type MapState =
           MaxConcurrency?: number
           ItemsPath?: string
           Iterator: StateMachine
+          ItemProcessor: ItemProcessor
+          ItemReader?: ItemReader
+          ItemSelector?: {
+              [k: string]: string | undefined
+          }
+          ItemBatcher?: ItemBatcher
+          MaxConcurrencyPath?: string
+          Label?: string
+          ToleratedFailurePercentage?: number
+          ToleratedFailurePercentagePath?: string
+          ToleratedFailureCount?: number
+          ToleratedFailureCountPath?: string
+          ResultWriter?: string
           End: boolean
       }
     | {
@@ -41,6 +75,19 @@ export type MapState =
           MaxConcurrency?: number
           ItemsPath?: string
           Iterator: StateMachine
+          ItemProcessor: ItemProcessor
+          ItemReader?: ItemReader
+          ItemSelector?: {
+              [k: string]: string | undefined
+          }
+          ItemBatcher?: ItemBatcher
+          MaxConcurrencyPath?: string
+          Label?: string
+          ToleratedFailurePercentage?: number
+          ToleratedFailurePercentagePath?: string
+          ToleratedFailureCount?: number
+          ToleratedFailureCountPath?: string
+          ResultWriter?: string
           Next: string
       }
 
@@ -72,6 +119,11 @@ export type ParallelState =
           Next: string
       }
 
+export interface Parameters {
+    Bucket?: string
+    Key?: string
+}
+
 export type PassState =
     | {
           Type: 'Pass'
@@ -93,6 +145,18 @@ export type PassState =
           Result?: unknown
           Next: string
       }
+
+export interface ProcessConfig {
+    Mode: string
+    ExecutionType: string
+}
+
+export interface ReaderConfig {
+    InputType?: string
+    CSVHeaderLocation?: string
+    CSVHeaders?: [string, ...string[]]
+    MaxItems?: number
+}
 
 export type State = TaskState | ParallelState | MapState | PassState | WaitState | ChoiceState | SucceedState | FailState
 
