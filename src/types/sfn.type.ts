@@ -14,17 +14,19 @@ export interface FailState {
 
 export interface ItemBatcher {
     MaxItemsPerBatchPath?: {
-        [k: string]: string | undefined
+        [k: string]: number | undefined
     }
     MaxInputBytesPerBatchPath?: {
-        [k: string]: string | undefined
+        [k: string]: number | undefined
     }
 }
 
 export interface ItemProcessor {
     ProcessorConfig?: ProcessConfig
     StartAt: string
-    States: TaskState
+    States: {
+        [k: string]: TaskState | undefined
+    }
 }
 
 export interface ItemReader {
