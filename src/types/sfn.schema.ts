@@ -65,6 +65,41 @@ export const parallelState = $union(
         ),
     }).map((x) => $object(x))
 )
+
+export const processConfig = $object({
+    Mode: $string(),
+    ExecutionType: $string(),
+})
+
+export const itemProcessor = $object({
+    ProcessorConfig: $optional($ref(processConfig)),
+    StartAt: $string(),
+    States: $ref(taskState),
+})
+
+export const readerConfig = $object({
+    InputType: $optional($string),
+    CSVHeaderLocation: $optional($string),
+    CSVHeaders: $optional($array($string, { minItems: 1 })),
+    MaxItems: $optional($number),
+})
+
+export const parameters = $object({
+    Bucket: $optional($string),
+    Key: $optional($string),
+})
+
+export const itemReader = $object({
+    ReaderConfig: $optional($ref(readerConfig)),
+    Resource: $optional($string),
+    Parameters: $optional($ref(parameters)),
+})
+
+export const itemBatcher = $object({
+    MaxItemsPerBatchPath: $optional($dict($string)),
+    MaxInputBytesPerBatchPath: $optional($dict($string)),
+})
+
 export const mapState = $union(
     eitherEndOrNext({
         Type: $const('Map'),
@@ -72,6 +107,17 @@ export const mapState = $union(
         MaxConcurrency: $optional($number),
         ItemsPath: $optional($string),
         Iterator: $ref(() => stateMachine),
+        ItemProcessor: $ref(itemProcessor),
+        ItemReader: $optional($ref(itemReader)),
+        ItemSelector: $optional($dict($string)),
+        ItemBatcher: $optional($ref(itemBatcher)),
+        MaxConcurrencyPath: $optional($string),
+        Label: $optional($string),
+        ToleratedFailurePercentage: $optional($number),
+        ToleratedFailurePercentagePath: $optional($string),
+        ToleratedFailureCount: $optional($number),
+        ToleratedFailureCountPath: $optional($string),
+        ResultWriter: $optional($string),
     }).map((x) => $object(x))
 )
 
