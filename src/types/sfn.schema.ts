@@ -74,7 +74,7 @@ export const processConfig = $object({
 export const itemProcessor = $object({
     ProcessorConfig: $optional($ref(processConfig)),
     StartAt: $string(),
-    States: $ref(taskState),
+    States: $dict($ref(taskState)),
 })
 
 export const readerConfig = $object({
@@ -96,8 +96,8 @@ export const itemReader = $object({
 })
 
 export const itemBatcher = $object({
-    MaxItemsPerBatchPath: $optional($dict($string)),
-    MaxInputBytesPerBatchPath: $optional($dict($string)),
+    MaxItemsPerBatchPath: $optional($dict($number)),
+    MaxInputBytesPerBatchPath: $optional($dict($number)),
 })
 
 export const mapState = $union(
