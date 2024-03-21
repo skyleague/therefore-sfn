@@ -24,7 +24,7 @@ export function listLambdaArns(definition: StateMachine) {
                 lambdaArns.push(...listLambdaArns(branch))
             }
         } else if (state?.Type === 'Map') {
-            lambdaArns.push(...listLambdaArns(state.Iterator))
+            lambdaArns.push(...listLambdaArns(state.ItemProcessor))
         } else if (
             state?.Type === 'Pass' ||
             state?.Type === 'Choice' ||

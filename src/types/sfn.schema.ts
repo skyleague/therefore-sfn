@@ -106,7 +106,7 @@ export const mapState = $union(
         ...retryableState,
         MaxConcurrency: $optional($number),
         ItemsPath: $optional($string),
-        Iterator: $ref(() => stateMachine),
+        Iterator: $optional($ref(() => stateMachine)),
         ItemProcessor: $ref(itemProcessor),
         ItemReader: $optional($ref(itemReader)),
         ItemSelector: $optional($dict($string)),
