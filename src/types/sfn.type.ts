@@ -124,6 +124,7 @@ export type ParallelState =
 export interface Parameters {
     Bucket?: string
     Key?: string
+    Prefix?: string
 }
 
 export type PassState =

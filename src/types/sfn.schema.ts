@@ -87,6 +87,7 @@ export const readerConfig = $object({
 export const parameters = $object({
     Bucket: $optional($string),
     Key: $optional($string),
+    Prefix: $optional($string),
 })
 
 export const itemReader = $object({
