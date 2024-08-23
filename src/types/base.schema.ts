@@ -1,41 +1,38 @@
-import { $array, $boolean, $enum, $number, $object, $optional, $ref, $string, $unknown } from '@skyleague/therefore'
+import { $array, $boolean, $enum, $number, $object, $ref, $string, $union, $unknown, type ObjectType } from '@skyleague/therefore'
 
-export const baseState = {
-    Comment: $optional($string),
-}
-export const baseInOutState = {
-    ...baseState,
-    InputPath: $optional($string),
-    OutputPath: $optional($string),
-}
-export const parametrizedState = {
-    ...baseInOutState,
-    ResultPath: $optional($string),
-    Parameters: $optional($unknown),
-}
+export const baseState = $object({
+    Comment: $string().optional(),
+})
+
+export const baseInOutState = baseState.extend({
+    InputPath: $string().optional(),
+    OutputPath: $string().optional(),
+})
+
+export const parametrizedState = baseInOutState.extend({
+    ResultPath: $string().optional(),
+    Parameters: $unknown().optional(),
+})
+
 export const retryOptions = $object({
     ErrorEquals: $array($string, { minItems: 1 }),
-    IntervalSeconds: $optional($number),
-    MaxAttempts: $optional($number),
-    BackoffRate: $optional($number),
-    MaxDelaySeconds: $optional($number),
-    JitterStrategy: $optional($enum(['FULL', 'NONE'])),
+    IntervalSeconds: $number().optional(),
+    MaxAttempts: $number().optional(),
+    BackoffRate: $number().optional(),
+    MaxDelaySeconds: $number().optional(),
+    JitterStrategy: $enum(['FULL', 'NONE']).optional(),
 })
 export const catchOptions = $object({
-    ErrorEquals: $array($string, { minItems: 1 }),
     Next: $string,
-    ResultPath: $optional($string),
+    ErrorEquals: $string().array({ minItems: 1 }),
+    ResultPath: $string().optional(),
 })
-export const retryableState = {
-    ...parametrizedState,
-    ResultSelector: $optional($unknown),
-    Retry: $optional($array($ref(retryOptions), { minItems: 1 })),
-    Catch: $optional($array($ref(catchOptions), { minItems: 1 })),
-}
+export const retryableState = parametrizedState.extend({
+    ResultSelector: $unknown().optional(),
+    Retry: $ref(retryOptions).array({ minItems: 1 }).optional(),
+    Catch: $ref(catchOptions).array({ minItems: 1 }).optional(),
+})
 
-export function eitherEndOrNext<T>(x: T) {
-    return [
-        { ...x, End: $boolean },
-        { ...x, Next: $string },
-    ]
+export function endOrNext<T extends ObjectType>(x: T) {
+    return $union([x.extend({ End: $boolean }), x.extend({ Next: $string })])
 }

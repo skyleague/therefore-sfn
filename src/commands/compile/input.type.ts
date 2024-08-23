@@ -3,18 +3,21 @@
  * Do not manually touch this
  */
 /* eslint-disable */
-import type { ValidateFunction } from 'ajv'
-import { ValidationError } from 'ajv'
 
-export interface LambdaIntegrationParameters {
+import type { DefinedError, ValidateFunction } from 'ajv'
+
+import { validate as LambdaIntegrationParametersValidator } from './schemas/lambda-integration-parameters.schema.js'
+import { validate as StateMachineCompileInputValidator } from './schemas/state-machine-compile-input.schema.js'
+
+export type LambdaIntegrationParameters = {
+    [k: string]: unknown
+} & {
     FunctionName: string
     Payload: unknown
-    [k: string]: unknown
 }
 
 export const LambdaIntegrationParameters = {
-    validate: (await import('./schemas/lambda-integration-parameters.schema.js'))
-        .validate as ValidateFunction<LambdaIntegrationParameters>,
+    validate: LambdaIntegrationParametersValidator as ValidateFunction<LambdaIntegrationParameters>,
     get schema() {
         return LambdaIntegrationParameters.validate.schema
     },
@@ -22,10 +25,11 @@ export const LambdaIntegrationParameters = {
         return LambdaIntegrationParameters.validate.errors ?? undefined
     },
     is: (o: unknown): o is LambdaIntegrationParameters => LambdaIntegrationParameters.validate(o) === true,
-    assert: (o: unknown) => {
-        if (!LambdaIntegrationParameters.validate(o)) {
-            throw new ValidationError(LambdaIntegrationParameters.errors ?? [])
+    parse: (o: unknown): { right: LambdaIntegrationParameters } | { left: DefinedError[] } => {
+        if (LambdaIntegrationParameters.is(o)) {
+            return { right: o }
         }
+        return { left: (LambdaIntegrationParameters.errors ?? []) as DefinedError[] }
     },
 } as const
 
@@ -37,8 +41,7 @@ export interface StateMachineCompileInput {
 }
 
 export const StateMachineCompileInput = {
-    validate: (await import('./schemas/state-machine-compile-input.schema.js'))
-        .validate as ValidateFunction<StateMachineCompileInput>,
+    validate: StateMachineCompileInputValidator as ValidateFunction<StateMachineCompileInput>,
     get schema() {
         return StateMachineCompileInput.validate.schema
     },
@@ -46,9 +49,10 @@ export const StateMachineCompileInput = {
         return StateMachineCompileInput.validate.errors ?? undefined
     },
     is: (o: unknown): o is StateMachineCompileInput => StateMachineCompileInput.validate(o) === true,
-    assert: (o: unknown) => {
-        if (!StateMachineCompileInput.validate(o)) {
-            throw new ValidationError(StateMachineCompileInput.errors ?? [])
+    parse: (o: unknown): { right: StateMachineCompileInput } | { left: DefinedError[] } => {
+        if (StateMachineCompileInput.is(o)) {
+            return { right: o }
         }
+        return { left: (StateMachineCompileInput.errors ?? []) as DefinedError[] }
     },
 } as const

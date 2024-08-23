@@ -2,68 +2,47 @@
  * Definitions in this file are based on the AWS spec:
  * https://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html
  */
-import { baseInOutState, baseState, eitherEndOrNext, parametrizedState, retryableState } from './base.schema.js'
+import { baseInOutState, baseState, endOrNext, parametrizedState, retryableState } from './base.schema.js'
 import { choiceState } from './choice.schema.js'
 
-import {
-    $array,
-    $const,
-    $dict,
-    $number,
-    $object,
-    $optional,
-    $ref,
-    $string,
-    $union,
-    $unknown,
-    $validator,
-} from '@skyleague/therefore'
+import { $const, $number, $object, $record, $ref, $string, $union, $unknown, type UnionType } from '@skyleague/therefore'
 
-export const failState = $object({
+export const failState = baseState.extend({
     Type: $const('Fail'),
-    ...baseState,
 })
 
-export const succeedState = $object({
+export const succeedState = baseInOutState.extend({
     Type: $const('Succeed'),
-    ...baseInOutState,
 })
 
-export const passState = $union(
-    eitherEndOrNext({
+export const passState = endOrNext(
+    parametrizedState.extend({
         Type: $const('Pass'),
-        ...parametrizedState,
-        Result: $optional($unknown),
-    }).map((x) => $object(x))
+        Result: $unknown().optional(),
+    }),
 )
-export const taskState = $union(
-    eitherEndOrNext({
+export const taskState = endOrNext(
+    retryableState.extend({
         Type: $const('Task'),
-        ...retryableState,
         Resource: $string,
-        TimeoutSeconds: $optional($number),
-        HeartbeatSeconds: $optional($number),
-        TimeoutSecondsPath: $optional($string),
-        HeartbeatSecondsPath: $optional($string),
-    }).map((x) => $object(x))
+        TimeoutSeconds: $number().optional(),
+        HeartbeatSeconds: $number().optional(),
+        TimeoutSecondsPath: $string().optional(),
+        HeartbeatSecondsPath: $string().optional(),
+    }),
 )
 
-export const waitState = $union(
-    eitherEndOrNext({
+export const waitState = endOrNext(
+    baseInOutState.extend({
         Type: $const('Wait'),
-        ...baseInOutState,
-    }).map((x) => $object(x))
+    }),
 )
 
-export const parallelState = $union(
-    eitherEndOrNext({
+export const parallelState: UnionType = endOrNext(
+    retryableState.extend({
         Type: $const('Parallel'),
-        ...retryableState,
-        Branches: $array(
-            $ref(() => stateMachine),
-            { minItems: 1 }
-        ),
-    }).map((x) => $object(x))
+        Branches: $ref(() => stateMachine).array({ minItems: 1 }),
+    }),
 )
 
 export const processConfig = $object({
@@ -72,57 +51,56 @@ export const processConfig = $object({
 })
 
 export const itemProcessor = $object({
-    ProcessorConfig: $optional($ref(processConfig)),
+    ProcessorConfig: $ref(processConfig).optional(),
     StartAt: $string(),
-    States: $dict($ref(taskState)),
+    States: $record($ref(taskState)),
 })
 
 export const readerConfig = $object({
-    InputType: $optional($string),
-    CSVHeaderLocation: $optional($string),
-    CSVHeaders: $optional($array($string, { minItems: 1 })),
-    MaxItems: $optional($number),
+    InputType: $string().optional(),
+    CSVHeaderLocation: $string().optional(),
+    CSVHeaders: $string().array({ minItems: 1 }).optional(),
+    MaxItems: $number().optional(),
 })
 
 export const parameters = $object({
-    Bucket: $optional($string),
-    Key: $optional($string),
-    Prefix: $optional($string),
+    Bucket: $string().optional(),
+    Key: $string().optional(),
+    Prefix: $string().optional(),
 })
 
 export const itemReader = $object({
-    ReaderConfig: $optional($ref(readerConfig)),
-    Resource: $optional($string),
-    Parameters: $optional($ref(parameters)),
+    ReaderConfig: $ref(readerConfig).optional(),
+    Resource: $string().optional(),
+    Parameters: $ref(parameters).optional(),
 })
 
 export const itemBatcher = $object({
-    MaxItemsPerBatchPath: $optional($dict($number)),
-    MaxInputBytesPerBatchPath: $optional($dict($number)),
+    MaxItemsPerBatchPath: $record($number).optional(),
+    MaxInputBytesPerBatchPath: $record($number).optional(),
 })
 
-export const mapState = $union(
-    eitherEndOrNext({
+export const mapState = endOrNext(
+    retryableState.extend({
         Type: $const('Map'),
-        ...retryableState,
-        MaxConcurrency: $optional($number),
-        ItemsPath: $optional($string),
-        Iterator: $optional($ref(() => stateMachine)),
+        MaxConcurrency: $number().optional(),
+        ItemsPath: $string().optional(),
+        Iterator: $ref(() => stateMachine).optional(),
         ItemProcessor: $ref(itemProcessor),
-        ItemReader: $optional($ref(itemReader)),
-        ItemSelector: $optional($dict($string)),
-        ItemBatcher: $optional($ref(itemBatcher)),
-        MaxConcurrencyPath: $optional($string),
-        Label: $optional($string),
-        ToleratedFailurePercentage: $optional($number),
-        ToleratedFailurePercentagePath: $optional($string),
-        ToleratedFailureCount: $optional($number),
-        ToleratedFailureCountPath: $optional($string),
-        ResultWriter: $optional($string),
-    }).map((x) => $object(x))
+        ItemReader: $ref(itemReader).optional(),
+        ItemSelector: $record($string).optional(),
+        ItemBatcher: $ref(itemBatcher).optional(),
+        MaxConcurrencyPath: $string().optional(),
+        Label: $string().optional(),
+        ToleratedFailurePercentage: $number().optional(),
+        ToleratedFailurePercentagePath: $string().optional(),
+        ToleratedFailureCount: $number().optional(),
+        ToleratedFailureCountPath: $string().optional(),
+        ResultWriter: $string().optional(),
+    }),
 )
 
-export const state = $union([
+export const state: UnionType = $union([
     $ref(taskState),
     $ref(() => parallelState),
     $ref(() => mapState),
@@ -133,12 +111,9 @@ export const state = $union([
     $ref(failState),
 ])
 
-export const stateMachine = $validator(
-    $object({
-        Comment: $optional($string),
-        StartAt: $string(),
-        States: $dict(state),
-        TimeoutSeconds: $optional($number),
-    }),
-    { assert: false }
-)
+export const stateMachine = $object({
+    Comment: $string().optional(),
+    StartAt: $string(),
+    States: $record(state),
+    TimeoutSeconds: $number().optional(),
+}).validator()

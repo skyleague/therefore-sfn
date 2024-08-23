@@ -4,17 +4,46 @@
  */
 /* eslint-disable */
 
+export interface BaseInOutState {
+    Comment?: string | undefined
+    InputPath?: string | undefined
+    OutputPath?: string | undefined
+}
+
+export interface BaseState {
+    Comment?: string | undefined
+}
+
 export interface CatchOptions {
-    ErrorEquals: [string, ...string[]]
     Next: string
-    ResultPath?: string
+    ErrorEquals: [string, ...string[]]
+    ResultPath?: string | undefined
+}
+
+export interface ParametrizedState {
+    Comment?: string | undefined
+    InputPath?: string | undefined
+    OutputPath?: string | undefined
+    ResultPath?: string | undefined
+    Parameters?: unknown
+}
+
+export interface RetryableState {
+    Comment?: string | undefined
+    InputPath?: string | undefined
+    OutputPath?: string | undefined
+    ResultPath?: string | undefined
+    Parameters?: unknown
+    ResultSelector?: unknown
+    Retry?: [RetryOptions, ...RetryOptions[]] | undefined
+    Catch?: [CatchOptions, ...CatchOptions[]] | undefined
 }
 
 export interface RetryOptions {
     ErrorEquals: [string, ...string[]]
-    IntervalSeconds?: number
-    MaxAttempts?: number
-    BackoffRate?: number
-    MaxDelaySeconds?: number
-    JitterStrategy?: 'FULL' | 'NONE'
+    IntervalSeconds?: number | undefined
+    MaxAttempts?: number | undefined
+    BackoffRate?: number | undefined
+    MaxDelaySeconds?: number | undefined
+    JitterStrategy?: 'FULL' | 'NONE' | undefined
 }
