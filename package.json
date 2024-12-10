@@ -26,23 +26,24 @@
     "check:project": "node-standards lint",
     "check:types": "tsc -p tsconfig.json",
     "lint": "biome check",
-    "lint:fix": "npm run lint -- --write --unsafe",
-    "package": "rm -rf .dist && npm run build",
+    "lint:fix": "node --run lint -- --write --unsafe",
+    "package": "rm -rf .dist && node --run build",
     "prepare": "husky || true",
-    "test": "vitest run"
+    "test": "vitest run",
+    "prebuild:docs": "npm ci"
   },
   "dependencies": {
     "ajv": "^8.17.1",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@skyleague/node-standards": "^8.0.1",
-    "@skyleague/therefore": "^5.10.2",
+    "@skyleague/node-standards": "^9.5.1",
+    "@skyleague/therefore": "^7.9.0",
     "@types/yargs": "^17.0.33",
-    "typescript": "^5.5.4"
+    "typescript": "^5.7.2"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "publishConfig": {
     "access": "public",

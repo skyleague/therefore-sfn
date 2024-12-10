@@ -32,7 +32,6 @@ export function listLambdaArns(definition: StateMachine) {
             state?.Type === 'Succeed' ||
             state?.Type === 'Wait'
         ) {
-            continue
         } else {
             throw new Error(`Unrecognized State: ${JSON.stringify(state, null, 2)}`)
         }
