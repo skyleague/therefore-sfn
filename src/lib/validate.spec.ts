@@ -25,7 +25,7 @@ it('lambda retry injection', () => {
                     },
                 },
             },
-        })
+        }),
     ).toMatchInlineSnapshot(`
       {
         "StartAt": "Enter",
