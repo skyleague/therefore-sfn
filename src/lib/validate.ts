@@ -1,5 +1,5 @@
 import type { SafeStateMachine } from '../types/index.js'
-import { StateMachine, type State } from '../types/sfn.type.js'
+import { type State, StateMachine } from '../types/sfn.type.js'
 
 export function validateStateMachine<States extends StateMachine['States']>({
     definition,
@@ -67,7 +67,7 @@ function validateNext({
     }
 
     if ('Catch' in state) {
-        for (const c of state.Catch) {
+        for (const c of state.Catch ?? []) {
             visited = validateNext({
                 definition,
                 next: c.Next,
@@ -96,10 +96,10 @@ function validateNext({
                 retryOptions,
                 onState,
             })
-        } else {
-            return visited
         }
-    } else if ('Next' in state) {
+        return visited
+    }
+    if ('Next' in state) {
         return validateNext({
             definition,
             next: state.Next,
@@ -107,13 +107,14 @@ function validateNext({
             retryOptions,
             onState,
         })
-    } else if ('End' in state && state.End) {
-        return visited
-    } else if (state.Type === 'Succeed' || state.Type === 'Fail') {
-        return visited
-    } else {
-        throw new Error(`Undefined state transition in ${next}`)
     }
+    if ('End' in state && state.End) {
+        return visited
+    }
+    if (state.Type === 'Succeed' || state.Type === 'Fail') {
+        return visited
+    }
+    throw new Error(`Undefined state transition in ${next}`)
 }
 
 interface RetryOptions {
@@ -171,7 +172,7 @@ function injectRetryOptions({
             ]
         }
         const unhandled = ['Lambda.ServiceException', 'Lambda.AWSLambdaException', 'Lambda.SdkClientException'].filter(
-            (err) => !state.Retry?.some((r) => r.ErrorEquals.includes(err))
+            (err) => !state.Retry?.some((r) => r.ErrorEquals.includes(err)),
         )
         if (retryOptions?.lambda?.serviceExceptions?.enabled !== false && unhandled.length > 0) {
             state.Retry = [

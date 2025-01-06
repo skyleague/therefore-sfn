@@ -4,16 +4,17 @@
  */
 /* eslint-disable */
 
-interface Choices {
-    Next: string
+export type Choices = {
     [k: string]: unknown
+} & {
+    Next: string
 }
 
 export interface ChoiceState {
+    Comment?: string | undefined
+    InputPath?: string | undefined
+    OutputPath?: string | undefined
     Type: 'Choice'
-    Comment?: string
-    InputPath?: string
-    OutputPath?: string
     Choices: [Choices, ...Choices[]]
-    Default?: string
+    Default?: string | undefined
 }

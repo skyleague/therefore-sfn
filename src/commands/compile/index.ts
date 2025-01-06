@@ -7,6 +7,7 @@ import type { Argv } from 'yargs'
 
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
+import { ValidationError } from 'ajv'
 
 export function builder(yargs: Argv): Argv<StateMachineCompileInput> {
     return yargs
@@ -21,9 +22,12 @@ export function builder(yargs: Argv): Argv<StateMachineCompileInput> {
 
 export async function handler(argv: ReturnType<typeof builder>['argv']): Promise<void> {
     const input = await argv
-    StateMachineCompileInput.assert(input)
+    const parsed = StateMachineCompileInput.parse(input)
+    if ('left' in parsed) {
+        throw new ValidationError(parsed.left)
+    }
 
-    let { file } = input
+    let { file } = parsed.right
     if (!path.isAbsolute(file)) {
         // If the path is not an absolute path, attempt to resolve it relative to the working directory
         file = path.join(process.cwd(), file)
@@ -31,15 +35,15 @@ export async function handler(argv: ReturnType<typeof builder>['argv']): Promise
     file = pathToFileURL(file).href
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const { [input.export]: definition } = await import(file)
+    const { [parsed.right.export]: definition } = await import(file)
     const lambdaArns = [...listLambdaArns(definition as StateMachine)].sort()
     console.log(
         JSON.stringify({
             definition: JSON.stringify(definition),
             lambda_arns: JSON.stringify(lambdaArns),
         })
-            .replace(/\$\{aws_region\}/g, input.awsRegion)
-            .replace(/\$\{aws_account_id\}/g, input.awsAccountId)
+            .replace(/\$\{aws_region\}/g, parsed.right.awsRegion)
+            .replace(/\$\{aws_account_id\}/g, parsed.right.awsAccountId),
     )
 }
 

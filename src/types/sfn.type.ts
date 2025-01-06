@@ -3,26 +3,33 @@
  * Do not manually touch this
  */
 /* eslint-disable */
-import type { ValidateFunction } from 'ajv'
-import { type CatchOptions, type RetryOptions } from './base.type.js'
-import { type ChoiceState } from './choice.type.js'
+
+import type { CatchOptions, RetryOptions } from './base.type.js'
+import type { ChoiceState } from './choice.type.js'
+import { validate as StateMachineValidator } from './schemas/state-machine.schema.js'
+
+import type { DefinedError, ValidateFunction } from 'ajv'
 
 export interface FailState {
+    Comment?: string | undefined
     Type: 'Fail'
-    Comment?: string
 }
 
 export interface ItemBatcher {
-    MaxItemsPerBatchPath?: {
-        [k: string]: number | undefined
-    }
-    MaxInputBytesPerBatchPath?: {
-        [k: string]: number | undefined
-    }
+    MaxItemsPerBatchPath?:
+        | {
+              [k: string]: number | undefined
+          }
+        | undefined
+    MaxInputBytesPerBatchPath?:
+        | {
+              [k: string]: number | undefined
+          }
+        | undefined
 }
 
 export interface ItemProcessor {
-    ProcessorConfig?: ProcessConfig
+    ProcessorConfig?: ProcessConfig | undefined
     StartAt: string
     States: {
         [k: string]: TaskState | undefined
@@ -30,121 +37,125 @@ export interface ItemProcessor {
 }
 
 export interface ItemReader {
-    ReaderConfig?: ReaderConfig
-    Resource?: string
-    Parameters?: Parameters
+    ReaderConfig?: ReaderConfig | undefined
+    Resource?: string | undefined
+    Parameters?: Parameters | undefined
 }
 
 export type MapState =
     | {
-          Type: 'Map'
-          Comment?: string
-          InputPath?: string
-          OutputPath?: string
-          ResultPath?: string
+          Comment?: string | undefined
+          InputPath?: string | undefined
+          OutputPath?: string | undefined
+          ResultPath?: string | undefined
           Parameters?: unknown
           ResultSelector?: unknown
-          Retry?: [RetryOptions, ...RetryOptions[]]
-          Catch?: [CatchOptions, ...CatchOptions[]]
-          MaxConcurrency?: number
-          ItemsPath?: string
-          Iterator?: StateMachine
+          Retry?: [RetryOptions, ...RetryOptions[]] | undefined
+          Catch?: [CatchOptions, ...CatchOptions[]] | undefined
+          Type: 'Map'
+          MaxConcurrency?: number | undefined
+          ItemsPath?: string | undefined
+          Iterator?: StateMachine | undefined
           ItemProcessor: ItemProcessor
-          ItemReader?: ItemReader
-          ItemSelector?: {
-              [k: string]: string | undefined
-          }
-          ItemBatcher?: ItemBatcher
-          MaxConcurrencyPath?: string
-          Label?: string
-          ToleratedFailurePercentage?: number
-          ToleratedFailurePercentagePath?: string
-          ToleratedFailureCount?: number
-          ToleratedFailureCountPath?: string
-          ResultWriter?: string
+          ItemReader?: ItemReader | undefined
+          ItemSelector?:
+              | {
+                    [k: string]: string | undefined
+                }
+              | undefined
+          ItemBatcher?: ItemBatcher | undefined
+          MaxConcurrencyPath?: string | undefined
+          Label?: string | undefined
+          ToleratedFailurePercentage?: number | undefined
+          ToleratedFailurePercentagePath?: string | undefined
+          ToleratedFailureCount?: number | undefined
+          ToleratedFailureCountPath?: string | undefined
+          ResultWriter?: string | undefined
           End: boolean
       }
     | {
-          Type: 'Map'
-          Comment?: string
-          InputPath?: string
-          OutputPath?: string
-          ResultPath?: string
+          Comment?: string | undefined
+          InputPath?: string | undefined
+          OutputPath?: string | undefined
+          ResultPath?: string | undefined
           Parameters?: unknown
           ResultSelector?: unknown
-          Retry?: [RetryOptions, ...RetryOptions[]]
-          Catch?: [CatchOptions, ...CatchOptions[]]
-          MaxConcurrency?: number
-          ItemsPath?: string
-          Iterator?: StateMachine
+          Retry?: [RetryOptions, ...RetryOptions[]] | undefined
+          Catch?: [CatchOptions, ...CatchOptions[]] | undefined
+          Type: 'Map'
+          MaxConcurrency?: number | undefined
+          ItemsPath?: string | undefined
+          Iterator?: StateMachine | undefined
           ItemProcessor: ItemProcessor
-          ItemReader?: ItemReader
-          ItemSelector?: {
-              [k: string]: string | undefined
-          }
-          ItemBatcher?: ItemBatcher
-          MaxConcurrencyPath?: string
-          Label?: string
-          ToleratedFailurePercentage?: number
-          ToleratedFailurePercentagePath?: string
-          ToleratedFailureCount?: number
-          ToleratedFailureCountPath?: string
-          ResultWriter?: string
+          ItemReader?: ItemReader | undefined
+          ItemSelector?:
+              | {
+                    [k: string]: string | undefined
+                }
+              | undefined
+          ItemBatcher?: ItemBatcher | undefined
+          MaxConcurrencyPath?: string | undefined
+          Label?: string | undefined
+          ToleratedFailurePercentage?: number | undefined
+          ToleratedFailurePercentagePath?: string | undefined
+          ToleratedFailureCount?: number | undefined
+          ToleratedFailureCountPath?: string | undefined
+          ResultWriter?: string | undefined
           Next: string
       }
 
 export type ParallelState =
     | {
-          Type: 'Parallel'
-          Comment?: string
-          InputPath?: string
-          OutputPath?: string
-          ResultPath?: string
+          Comment?: string | undefined
+          InputPath?: string | undefined
+          OutputPath?: string | undefined
+          ResultPath?: string | undefined
           Parameters?: unknown
           ResultSelector?: unknown
-          Retry?: [RetryOptions, ...RetryOptions[]]
-          Catch?: [CatchOptions, ...CatchOptions[]]
+          Retry?: [RetryOptions, ...RetryOptions[]] | undefined
+          Catch?: [CatchOptions, ...CatchOptions[]] | undefined
+          Type: 'Parallel'
           Branches: [StateMachine, ...StateMachine[]]
           End: boolean
       }
     | {
-          Type: 'Parallel'
-          Comment?: string
-          InputPath?: string
-          OutputPath?: string
-          ResultPath?: string
+          Comment?: string | undefined
+          InputPath?: string | undefined
+          OutputPath?: string | undefined
+          ResultPath?: string | undefined
           Parameters?: unknown
           ResultSelector?: unknown
-          Retry?: [RetryOptions, ...RetryOptions[]]
-          Catch?: [CatchOptions, ...CatchOptions[]]
+          Retry?: [RetryOptions, ...RetryOptions[]] | undefined
+          Catch?: [CatchOptions, ...CatchOptions[]] | undefined
+          Type: 'Parallel'
           Branches: [StateMachine, ...StateMachine[]]
           Next: string
       }
 
 export interface Parameters {
-    Bucket?: string
-    Key?: string
-    Prefix?: string
+    Bucket?: string | undefined
+    Key?: string | undefined
+    Prefix?: string | undefined
 }
 
 export type PassState =
     | {
-          Type: 'Pass'
-          Comment?: string
-          InputPath?: string
-          OutputPath?: string
-          ResultPath?: string
+          Comment?: string | undefined
+          InputPath?: string | undefined
+          OutputPath?: string | undefined
+          ResultPath?: string | undefined
           Parameters?: unknown
+          Type: 'Pass'
           Result?: unknown
           End: boolean
       }
     | {
-          Type: 'Pass'
-          Comment?: string
-          InputPath?: string
-          OutputPath?: string
-          ResultPath?: string
+          Comment?: string | undefined
+          InputPath?: string | undefined
+          OutputPath?: string | undefined
+          ResultPath?: string | undefined
           Parameters?: unknown
+          Type: 'Pass'
           Result?: unknown
           Next: string
       }
@@ -155,27 +166,25 @@ export interface ProcessConfig {
 }
 
 export interface ReaderConfig {
-    InputType?: string
-    CSVHeaderLocation?: string
-    CSVHeaders?: [string, ...string[]]
-    MaxItems?: number
+    InputType?: string | undefined
+    CSVHeaderLocation?: string | undefined
+    CSVHeaders?: [string, ...string[]] | undefined
+    MaxItems?: number | undefined
 }
 
 export type State = TaskState | ParallelState | MapState | PassState | WaitState | ChoiceState | SucceedState | FailState
 
 export interface StateMachine {
-    Comment?: string
+    Comment?: string | undefined
     StartAt: string
     States: {
-        [k: string]:
-            | (TaskState | ParallelState | MapState | PassState | WaitState | ChoiceState | SucceedState | FailState)
-            | undefined
+        [k: string]: State | undefined
     }
-    TimeoutSeconds?: number
+    TimeoutSeconds?: number | undefined
 }
 
 export const StateMachine = {
-    validate: (await import('./schemas/state-machine.schema.js')).validate as ValidateFunction<StateMachine>,
+    validate: StateMachineValidator as ValidateFunction<StateMachine>,
     get schema() {
         return StateMachine.validate.schema
     },
@@ -183,63 +192,69 @@ export const StateMachine = {
         return StateMachine.validate.errors ?? undefined
     },
     is: (o: unknown): o is StateMachine => StateMachine.validate(o) === true,
+    parse: (o: unknown): { right: StateMachine } | { left: DefinedError[] } => {
+        if (StateMachine.is(o)) {
+            return { right: o }
+        }
+        return { left: (StateMachine.errors ?? []) as DefinedError[] }
+    },
 } as const
 
 export interface SucceedState {
+    Comment?: string | undefined
+    InputPath?: string | undefined
+    OutputPath?: string | undefined
     Type: 'Succeed'
-    Comment?: string
-    InputPath?: string
-    OutputPath?: string
 }
 
 export type TaskState =
     | {
-          Type: 'Task'
-          Comment?: string
-          InputPath?: string
-          OutputPath?: string
-          ResultPath?: string
+          Comment?: string | undefined
+          InputPath?: string | undefined
+          OutputPath?: string | undefined
+          ResultPath?: string | undefined
           Parameters?: unknown
           ResultSelector?: unknown
-          Retry?: [RetryOptions, ...RetryOptions[]]
-          Catch?: [CatchOptions, ...CatchOptions[]]
+          Retry?: [RetryOptions, ...RetryOptions[]] | undefined
+          Catch?: [CatchOptions, ...CatchOptions[]] | undefined
+          Type: 'Task'
           Resource: string
-          TimeoutSeconds?: number
-          HeartbeatSeconds?: number
-          TimeoutSecondsPath?: string
-          HeartbeatSecondsPath?: string
+          TimeoutSeconds?: number | undefined
+          HeartbeatSeconds?: number | undefined
+          TimeoutSecondsPath?: string | undefined
+          HeartbeatSecondsPath?: string | undefined
           End: boolean
       }
     | {
-          Type: 'Task'
-          Comment?: string
-          InputPath?: string
-          OutputPath?: string
-          ResultPath?: string
+          Comment?: string | undefined
+          InputPath?: string | undefined
+          OutputPath?: string | undefined
+          ResultPath?: string | undefined
           Parameters?: unknown
           ResultSelector?: unknown
-          Retry?: [RetryOptions, ...RetryOptions[]]
-          Catch?: [CatchOptions, ...CatchOptions[]]
+          Retry?: [RetryOptions, ...RetryOptions[]] | undefined
+          Catch?: [CatchOptions, ...CatchOptions[]] | undefined
+          Type: 'Task'
           Resource: string
-          TimeoutSeconds?: number
-          HeartbeatSeconds?: number
-          TimeoutSecondsPath?: string
-          HeartbeatSecondsPath?: string
+          TimeoutSeconds?: number | undefined
+          HeartbeatSeconds?: number | undefined
+          TimeoutSecondsPath?: string | undefined
+          HeartbeatSecondsPath?: string | undefined
           Next: string
       }
 
 export type WaitState =
     | {
+          Comment?: string | undefined
+          InputPath?: string | undefined
+          OutputPath?: string | undefined
           Type: 'Wait'
-          Comment?: string
-          InputPath?: string
-          OutputPath?: string
           End: boolean
       }
     | {
+          Comment?: string | undefined
+          InputPath?: string | undefined
+          OutputPath?: string | undefined
           Type: 'Wait'
-          Comment?: string
-          InputPath?: string
-          OutputPath?: string
           Next: string
       }
